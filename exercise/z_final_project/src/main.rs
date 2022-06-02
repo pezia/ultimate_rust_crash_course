@@ -85,10 +85,16 @@ fn main() {
                 img = grayscale(&mut img);
             }
             OP_FRACTAL => {
-               img = fractal();
+                let width: u32 = args.remove(0).parse().expect("Cannot parse WIDTH");
+                let height: u32 = args.remove(0).parse().expect("Cannot parse HEIGHT");
+
+                img = fractal(width, height);
             }
             OP_GENERATE => {
-               img = generate();
+                let width: u32 = args.remove(0).parse().expect("Cannot parse WIDTH");
+                let height: u32 = args.remove(0).parse().expect("Cannot parse HEIGHT");
+
+                img = generate(width, height);
             }
 
             // For everything else...
@@ -107,8 +113,8 @@ fn print_usage_and_exit() {
     println!("{OP_BLUR} SIGMA");
     println!("{OP_BRIGHTEN} BRIGHTNESS");
     println!("{OP_CROP} X Y WIDTH HEIGHT");
-    println!("{OP_FRACTAL} OUTFILE");
-    println!("{OP_GENERATE} OUTFILE");
+    println!("{OP_FRACTAL} WIDTH HEIGHT");
+    println!("{OP_GENERATE} WIDTH HEIGHT");
     println!("{OP_GRAYSCALE}");
     println!("{OP_INVERT}");
     println!("{OP_ROTATE} DEGREES");
@@ -146,9 +152,7 @@ fn grayscale(img: &mut DynamicImage) -> DynamicImage {
     img.grayscale()
 }
 
-fn generate() -> DynamicImage {
-    let width = 1024;
-    let height = 768;
+fn generate(width: u32, height: u32) -> DynamicImage {
     let mut imgbuf = RgbaImage::new(width, height);
 
     for pixel in imgbuf.pixels_mut() {
@@ -159,10 +163,7 @@ fn generate() -> DynamicImage {
 }
 
 // This code was adapted from https://github.com/PistonDevelopers/image
-fn fractal() -> DynamicImage {
-    let width = 800;
-    let height = 800;
-
+fn fractal(width: u32, height: u32) -> DynamicImage {
     let mut imgbuf = RgbaImage::new(width, height);
 
     let scale_x = 3.0 / width as f32;
