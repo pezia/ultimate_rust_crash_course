@@ -4,6 +4,15 @@ use image::{DynamicImage, ImageBuffer, Rgb};
 const ERROR_OUTFILE: &'static str = "Failed writing OUTFILE.";
 const ERROR_INFILE: &'static str = "Failed to open INFILE.";
 
+const OP_BLUR: &'static str = "blur";
+const OP_BRIGHTEN: &'static str = "brighten";
+const OP_CROP: &'static str = "crop";
+const OP_ROTATE: &'static str = "rotate";
+const OP_INVERT: &'static str = "invert";
+const OP_GRAYSCALE: &'static str = "grayscale";
+const OP_FRACTAL: &'static str = "fractal";
+const OP_GENERATE: &'static str = "generate";
+
 fn main() {
     let cmd = Command::new(env!("CARGO_CRATE_NAME"))
         .about("Mirage Image Processor")
@@ -46,17 +55,17 @@ fn main() {
 
         match subcommand {
             // EXAMPLE FOR CONVERSION OPERATIONS
-            "blur" => {
+            OP_BLUR => {
                 let sigma: f32 = args.remove(0).parse().expect("Cannot parse SIGMA");
 
                 img = blur(&mut img, sigma);
             }
-            "brighten" => {
+            OP_BRIGHTEN => {
                 let brightness: i32 = args.remove(0).parse().expect("Cannot parse BRIGHTNESS");
 
                 img = brighten(&mut img, brightness);
             }
-            "crop" => {
+            OP_CROP => {
                 let x: u32 = args.remove(0).parse().expect("Cannot parse X");
                 let y: u32 = args.remove(0).parse().expect("Cannot parse Y");
                 let width: u32 = args.remove(0).parse().expect("Cannot parse WIDTH");
@@ -64,21 +73,21 @@ fn main() {
 
                 img = crop(&mut img, x, y, width, height);
             }
-            "rotate" => {
+            OP_ROTATE => {
                 let degrees: i32 = args.remove(0).parse().expect("Cannot parse DEGREES");
 
                 img = rotate(&mut img, degrees);
             }
-            "invert" => {
+            OP_INVERT => {
                 img = invert(&mut img);
             }
-            "grayscale" => {
+            OP_GRAYSCALE => {
                 img = grayscale(&mut img);
             }
-            "fractal" => {
+            OP_FRACTAL => {
                 img = fractal();
             }
-            "generate" => {
+            OP_GENERATE => {
                 img = generate();
             }
 
@@ -93,17 +102,16 @@ fn main() {
 }
 
 fn print_usage_and_exit() {
-    println!("USAGE (when in doubt, use a .png extension on your filenames)");
+    println!("Available operations:");
 
-    println!("INFILE OUTFILE <operation> <parameters>");
-    println!("blur SIGMA");
-    println!("brighten BRIGHTNESS");
-    println!("crop X Y WIDTH HEIGHT");
-    println!("fractal OUTFILE");
-    println!("generate OUTFILE");
-    println!("grayscale");
-    println!("invert");
-    println!("rotate DEGREES");
+    println!("{OP_BLUR} SIGMA");
+    println!("{OP_BRIGHTEN} BRIGHTNESS");
+    println!("{OP_CROP} X Y WIDTH HEIGHT");
+    println!("{OP_FRACTAL} OUTFILE");
+    println!("{OP_GENERATE} OUTFILE");
+    println!("{OP_GRAYSCALE}");
+    println!("{OP_INVERT}");
+    println!("{OP_ROTATE} DEGREES");
 
     std::process::exit(-1);
 }
