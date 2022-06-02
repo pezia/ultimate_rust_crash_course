@@ -1,5 +1,5 @@
 use clap::{Arg, arg, Command};
-use image::{DynamicImage, ImageBuffer, Rgb};
+use image::{DynamicImage, Rgba, RgbaImage};
 
 const ERROR_OUTFILE: &'static str = "Failed writing OUTFILE.";
 const ERROR_INFILE: &'static str = "Failed to open INFILE.";
@@ -85,10 +85,10 @@ fn main() {
                 img = grayscale(&mut img);
             }
             OP_FRACTAL => {
-                img = fractal();
+               img = fractal();
             }
             OP_GENERATE => {
-                img = generate();
+               img = generate();
             }
 
             // For everything else...
@@ -149,13 +149,13 @@ fn grayscale(img: &mut DynamicImage) -> DynamicImage {
 fn generate() -> DynamicImage {
     let width = 1024;
     let height = 768;
-    let mut imgbuf = ImageBuffer::new(width, height);
+    let mut imgbuf = RgbaImage::new(width, height);
 
-    for (_x, _y, pixel) in imgbuf.enumerate_pixels_mut() {
-        *pixel = Rgb([255, 0, 0]);
+    for pixel in imgbuf.pixels_mut() {
+        *pixel = Rgba([255, 0, 0, 255]);
     }
 
-    image::load_from_memory(imgbuf.as_ref()).unwrap()
+    DynamicImage::from(imgbuf)
 }
 
 // This code was adapted from https://github.com/PistonDevelopers/image
@@ -163,7 +163,7 @@ fn fractal() -> DynamicImage {
     let width = 800;
     let height = 800;
 
-    let mut imgbuf = ImageBuffer::new(width, height);
+    let mut imgbuf = RgbaImage::new(width, height);
 
     let scale_x = 3.0 / width as f32;
     let scale_y = 3.0 / height as f32;
@@ -188,10 +188,10 @@ fn fractal() -> DynamicImage {
         }
 
         // Actually set the pixel. red, green, and blue are u8 values!
-        *pixel = Rgb([red, green, blue]);
+        *pixel = Rgba([red, green, blue, 255]);
     }
 
-    image::load_from_memory(imgbuf.as_ref()).unwrap()
+    DynamicImage::from(imgbuf)
 }
 
 // **SUPER CHALLENGE FOR LATER** - Let's face it, you don't have time for this during class.
