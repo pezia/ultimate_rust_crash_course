@@ -1,17 +1,17 @@
-use clap::{Arg, arg, Command};
+use clap::{arg, Arg, Command};
 use image::{DynamicImage, Rgba, RgbaImage};
 
-const ERROR_OUTFILE: &'static str = "Failed writing OUTFILE.";
-const ERROR_INFILE: &'static str = "Failed to open INFILE.";
+const ERROR_OUTFILE: &str = "Failed writing OUTFILE.";
+const ERROR_INFILE: &str = "Failed to open INFILE.";
 
-const OP_BLUR: &'static str = "blur";
-const OP_BRIGHTEN: &'static str = "brighten";
-const OP_CROP: &'static str = "crop";
-const OP_ROTATE: &'static str = "rotate";
-const OP_INVERT: &'static str = "invert";
-const OP_GRAYSCALE: &'static str = "grayscale";
-const OP_FRACTAL: &'static str = "fractal";
-const OP_GENERATE: &'static str = "generate";
+const OP_BLUR: &str = "blur";
+const OP_BRIGHTEN: &str = "brighten";
+const OP_CROP: &str = "crop";
+const OP_ROTATE: &str = "rotate";
+const OP_INVERT: &str = "invert";
+const OP_GRAYSCALE: &str = "grayscale";
+const OP_FRACTAL: &str = "fractal";
+const OP_GENERATE: &str = "generate";
 
 fn main() {
     let cmd = Command::new(env!("CARGO_CRATE_NAME"))
@@ -23,7 +23,7 @@ fn main() {
                 .help("input image file path")
                 .takes_value(true)
                 .required(true)
-                .use_value_delimiter(false)
+                .use_value_delimiter(false),
         )
         .arg(
             Arg::new("outfile")
@@ -31,11 +31,9 @@ fn main() {
                 .takes_value(true)
                 .required(true)
                 .default_missing_value("out.png")
-                .use_value_delimiter(false)
+                .use_value_delimiter(false),
         )
-        .arg(
-            arg!(<OPERATIONS> ... "Operations")
-        );
+        .arg(arg!(<OPERATIONS> ... "Operations"));
 
     let matches = cmd.get_matches();
 
